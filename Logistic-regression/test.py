@@ -24,6 +24,9 @@ def main():
     print(w,w_res)
     loss_vis(f,w_res,l,MSELoss)
 
+    w = sgd_cal(f,w_0,l,lr_gd,50)
+    print(w)
+
 
 
 

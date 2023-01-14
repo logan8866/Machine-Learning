@@ -76,20 +76,36 @@ def loss_vis(X, w_res, y, loss_func):
     plt.plot(np.arange(len(loss_value)), loss_value)
     plt.show()
 
-def sgd_cal(X, w, y, gd_cal, epoch, lr = 0.02):
+def sgd_cal(X, w, y, gd_cal, epoch, batch_size=1, lr=0.02, shuffle=True, random_state=24):
     """
-    随机梯度下降计算函数
+    随机梯度下降和小批量梯度下降计算函数
     :param X: 训练数据特征
     :param w: 初始参数取值
     :param y: 训练数据标签
     :param gd_cal：梯度计算公式
     :param epoch: 遍历数据集次数
-    :param lr: 学习率      
+    :batch_size: 每一个小批包含数据集的数量
+    :param lr: 学习率
+    :shuffle：是否在每个epoch开始前对数据集进行乱序处理
+    :random_state：随机数种子值
     :return w：最终参数计算结果       
     """
     m = X.shape[0]
     n = X.shape[1]
+    batch_num = np.ceil(m / batch_size)
+    X = np.copy(X)
+    y = np.copy(y)
     for j in range(epoch):
-        for i in range(m):
-            w = w_cal(X[i].reshape(1, n), w, y[i].reshape(1, 1), gd_cal=gd_cal, lr=lr, itera_times = 1)
+        if shuffle:            
+            np.random.seed(random_state)                           
+            np.random.shuffle(X)                            
+            np.random.seed(random_state)
+            np.random.shuffle(y)    
+        for i in range(np.int(batch_num)):
+            w = w_cal(X[i*batch_size: np.min([(i+1)*batch_size, m])], 
+                      w, 
+                      y[i*batch_size: np.min([(i+1)*batch_size, m])], 
+                      gd_cal=gd_cal, 
+                      lr=lr, 
+                      itera_times=1)
     return w
