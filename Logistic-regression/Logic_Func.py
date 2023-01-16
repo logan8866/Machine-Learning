@@ -101,11 +101,25 @@ def sgd_cal(X, w, y, gd_cal, epoch, batch_size=1, lr=0.02, shuffle=True, random_
             np.random.shuffle(X)                            
             np.random.seed(random_state)
             np.random.shuffle(y)    
-        for i in range(np.int(batch_num)):
-            w = w_cal(X[i*batch_size: np.min([(i+1)*batch_size, m])], 
+        for i in range(np.int_(batch_num)):
+            w,w_res = w_cal(X[i*batch_size: np.min([(i+1)*batch_size, m])], 
                       w, 
                       y[i*batch_size: np.min([(i+1)*batch_size, m])], 
                       gd_cal=gd_cal, 
                       lr=lr, 
                       itera_times=1)
     return w
+
+def maxmin_norm(X):
+    """
+    max—min normalization标准化函数
+    """
+    maxmin_range = X.max(axis=0) - X.min(axis=0)
+    return (X - X.min(axis=0)) / maxmin_range
+
+def z_score(X):
+    """
+    Z-Score标准化函数
+    """
+    return (X - X.mean(axis=0)) / X.std(axis=0)
+
