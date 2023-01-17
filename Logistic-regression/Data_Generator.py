@@ -50,11 +50,10 @@ def arrayGenCla(num_examples = 500, num_inputs = 2, num_class = 3, deg_dispersio
         labels_temp = np.full_like(cluster_l, i)                                           # 生成某一类的标签
         ll.append(labels_temp)                                                             # 将每一类标签添加到ll中
         
-    features = np.concatenate(lf,1).reshape(num_examples,num_class,num_inputs)
-    labels = np.concatenate(ll,1).reshape(num_examples,num_class,1)
-    
+    features = np.concatenate(lf)
+    labels = np.concatenate(ll)    
     if bias == True:
-        features = np.concatenate((features, np.ones(labels.shape)), 2)   # 在特征张量中添加一列全是1的列
+        features = np.concatenate((features, np.ones(labels.shape)),1)   # 在特征张量中添加一列全是1的列
     return features, labels
 
 
